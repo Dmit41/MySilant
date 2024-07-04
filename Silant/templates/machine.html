@@ -1,0 +1,95 @@
+{% extends 'default.html' %}
+
+
+
+{% block title %}
+    machine
+{% endblock title %}
+
+{% block content %}
+
+    <div class="permButtons">
+        {% csrf_token %}
+        {% if perms.datasilant.add_machine %}
+            <a href="{% url 'machine_create' %}"><button class="headerPermButton">Добавить машину</button></a>
+        {% endif %}
+<!--        {% if perms.datasilant.add_technicalservice %}-->
+<!--            <a href="{% url 'service_create' %}"><button class="headerPermButton">Добавить ТО</button></a>-->
+<!--        {% endif %}-->
+<!--        {% if perms.datasilant.add_reclamation %}-->
+<!--            <a href="{% url 'reclamation_create' %}"><button class="headerPermButton">Добавить рекламацию</button></a>-->
+<!--        {% endif %}-->
+    </div>
+
+    {% if not request.user.is_authenticated %}
+    <div class="searchPlaceholder">
+        {% csrf_token %}
+      <form action="" method="get">
+          {{ filterset.form.as_p }}
+      </form>
+    </div>
+    {% else %}
+    <div class="searchPlaceholder">
+      <form action="" method="get">
+          {{ filterset.form.as_p }}
+          <input type="submit" value="Найти" />
+      </form>
+    </div>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+    <div class="machineTable">
+        {% if machine %}
+        <table>
+           <tr class="machineTableNames">
+               <td>№ машины</td>
+               <td>Модель техники</td>
+               <td>Модель двигателя</td>
+               <td>№ двигателя</td>
+               <td>Модель трансмиссии</td>
+               <td>№ трансмиссии</td>
+               <td>Модель ведущего моста</td>
+               <td>№ Ведущего моста</td>
+               <td>Модель управляемого моста</td>
+               <td>№ управляемого моста</td>
+               <td>Договор поставки №, дата</td>
+               <td>Дата отгрузки с завода (Год-Месяц-День)</td>
+               <td>Грузополучатель (конечный потребитель)</td>
+               <td>Адрес поставки (эксплуатации)</td>
+               <td>Комплектация (доп. опции)</td>
+               <td>Клиент</td>
+               <td>Сервисная компания</td>
+           </tr>
+
+           {% for m in machine %}
+           <tr>
+               <td><a href="{% url 'machine_update' pk=m.id %}"> {{ m.machineNumber }}</a></td>
+               <td>{{ m.machineModel }}</td>
+               <td>{{ m.engineModel }}</td>
+               <td>{{ m.engineNumber }}</td>
+               <td>{{ m.transmissionModel }}</td>
+               <td>{{ m.transmissionNumber }}</td>
+               <td>{{ m.driveAxleModel }}</td>
+               <td>{{ m.driveAxleNumber }}</td>
+               <td>{{ m.steeringAxleModel }}</td>
+               <td>{{ m.steeringAxleNumber }}</td>
+               <td>{{ m.deliveryContract_N_data }}</td>
+               <td>{{ m.deliveryDate }}</td>
+               <td>{{ m.consignee }}</td>
+               <td>{{ m.deliveryAdress }}</td>
+               <td>{{ m.completeSet }}</td>
+               <td>{{ m.client }}</td>
+               <td>{{ m.serviceCompany }}</td>
+           </tr>
+               {% endfor %}
+        {% else %}
+        <h2>Таких машин нет</h2>
+        {% endif %}
+    </div>
+    {% endif %}
+<br>
+
+
+{% endblock content %}
+
+

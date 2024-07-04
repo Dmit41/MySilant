@@ -1,0 +1,20 @@
+{% extends 'default.html' %}
+
+
+{% block indexHead %}
+    <title>Создание Рекламации</title>
+{% endblock indexHead %}
+
+
+{% block user %}
+    <h1>Создание Рекламации:</h1>
+
+    <div style="margin-bottom: 100px">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="tableChangeButtons" type="submit">Submit</button>
+        </form>
+        <a href="{% url 'main' %}"><button class="tableChangeButtons">Cancel</button></a>
+    </div>
+{% endblock user %}

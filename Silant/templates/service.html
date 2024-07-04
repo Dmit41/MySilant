@@ -1,0 +1,57 @@
+{% extends 'default.html' %}
+
+
+
+{% block title %}
+    TO
+{% endblock title %}
+
+{% block content %}
+
+    <div class="permButtons">
+        {% csrf_token %}
+        {% if perms.datasilant.add_technicalservice %}
+            <a href="{% url 'service_create' %}"><button class="headerPermButton">Добавить ТО</button></a>
+        {% endif %}
+    </div>
+
+
+    <div class="searchPlaceholder">
+        <form action="" method="get">
+          {{ filterset.form.as_p }}
+          <input type="submit" value="Найти" />
+        </form>
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <div class="machineTable">
+        {% if service %}
+        <table>
+           <tr class="machineTableNames">
+               <td>Вид ТО</td>
+               <td>Дата проведения</td>
+               <td>Наработка, м/час</td>
+               <td>№ заказ-наряда</td>
+               <td>Дата заказ-наряда</td>
+               <td>Организация, проводившая ТО</td>
+               <td>Машина</td>
+
+           </tr>
+
+           {% for m in service %}
+           <tr>
+               <td><a href="{% url 'service_update' pk=m.id %}">{{ m.technicalServiceType }}</a></td>
+               <td>{{ m.technicalServiceDate }}</td>
+               <td>{{ m.operatingTime }}</td>
+               <td>{{ m.orderNumber }}</td>
+               <td>{{ m.orderDate }}</td>
+               <td>{{ m.technicalServiceCompany }}</td>
+               <td>{{ m.machine }}</td>
+           </tr>
+               {% endfor %}
+        {% else %}
+        <h2>Таких ТО нет</h2>
+        {% endif %}
+    </div>
+    {% endif %}
+{% endblock %}

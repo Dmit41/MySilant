@@ -1,0 +1,62 @@
+{% extends 'default.html' %}
+
+
+
+{% block title %}
+    TO
+{% endblock title %}
+
+{% block content %}
+
+    <div class="permButtons">
+        {% csrf_token %}
+        {% if perms.datasilant.add_reclamation %}
+            <a href="{% url 'reclamation_create' %}"><button class="headerPermButton">Добавить рекламацию</button></a>
+        {% endif %}
+    </div>
+
+
+    <div class="searchPlaceholder">
+        <form action="" method="get">
+          {{ filterset.form.as_p }}
+          <input type="submit" value="Найти" />
+        </form>
+    </div>
+
+    <div class="machineTable">
+        {% if reclamation %}
+        <table>
+           <tr class="machineTableNames">
+               <td>Дата отказа</td>
+               <td>Наработка, м/час</td>
+               <td>Узел отказа</td>
+               <td>Описание отказа</td>
+               <td>Способ восстановления</td>
+               <td>Используемые запасные части</td>
+               <td>Дата восстановления</td>
+               <td>Время простоя техники</td>
+               <td>Mашина</td>
+               <td>Cервисная компания</td>
+
+           </tr>
+
+           {% for m in reclamation %}
+           <tr>
+               <td><a href="{% url 'reclamation_update' pk=m.id %}">{{ m.failureDate }}</a></td>
+               <td>{{ m.operatingTime }}</td>
+               <td>{{ m.failureNode }}</td>
+               <td>{{ m.failureDescription }}</td>
+               <td>{{ m.repairMethod }}</td>
+               <td>{{ m.usedSpareParts }}</td>
+               <td>{{ m.repairDate }}</td>
+               <td>{{ m.machineDowntime }}</td>
+               <td>{{ m.machine }}</td>
+               <td>{{ m.serviceCompany }}</td>
+           </tr>
+               {% endfor %}
+        {% else %}
+        <h2>Таких Рекламаций нет</h2>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'default.html' %}
+
+
+
+{% block title %}
+    machine
+{% endblock title %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <div class="permButtons">
+            {% csrf_token %}
+                <a href="{% url 'machine' %}"><button class="headerPermButton">Просмотр машин</button></a>
+                <a href="{% url 'service' %}"><button class="headerPermButton">Просмотр ТО</button></a>
+                <a href="{% url 'reclamation' %}"><button class="headerPermButton">Просмотр рекламаций</button></a>
+
+        </div>
+    {% else %}
+        <div class="searchPlaceholder">
+            {% csrf_token %}
+            <form action="" method="get">
+                {{ search.form.as_p }}
+            </form>
+        </div>
+
+    <!--    <div class="searchPlaceholder">-->
+    <!--      <form action="" method="get">-->
+    <!--          {{ filterset.form.as_p }}-->
+    <!--          <input type="submit" value="Найти" />-->
+    <!--      </form>-->
+    <!--    </div>-->
+
+        <div class="machineTable">
+            {% if main %}
+            <table>
+               <tr class="machineTableNames">
+                   <td>№ машины</td>
+                   <td>Модель техники</td>
+                   <td>Модель двигателя</td>
+                   <td>№ двигателя</td>
+                   <td>Модель трансмиссии</td>
+                   <td>№ трансмиссии</td>
+                   <td>Модель ведущего моста</td>
+                   <td>№ Ведущего моста</td>
+                   <td>Модель управляемого моста</td>
+                   <td>№ управляемого моста</td>
+               </tr>
+
+               {% for m in main %}
+               <tr>
+                   <td>{{ m.machineNumber }}</td>
+                   <td>{{ m.machineModel }}</td>
+                   <td>{{ m.engineModel }}</td>
+                   <td>{{ m.engineNumber }}</td>
+                   <td>{{ m.transmissionModel }}</td>
+                   <td>{{ m.transmissionNumber }}</td>
+                   <td>{{ m.driveAxleModel }}</td>
+                   <td>{{ m.driveAxleNumber }}</td>
+                   <td>{{ m.steeringAxleModel }}</td>
+                   <td>{{ m.steeringAxleNumber }}</td>
+               </tr>
+                   {% endfor %}
+            {% else %}
+            <h2>Таких машин нет</h2>
+            {% endif %}
+        </div>
+
+
+
+
+    {% endif %}
+{% endblock %}
